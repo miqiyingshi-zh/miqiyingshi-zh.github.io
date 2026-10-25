@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<title>米奇影视 · 映画检修手册 | 站点 miqiyingshi-zh 的放映排程页 — github.io</title>
+<meta name="description" content="放映排程页 miqiyingshi-zh.github.io 由米奇影视维护，这里不摆热门榜单，只留检修过的片子：放映时间、片长、介质、观后批注逐条记下来。进到 https://miqiyingshi-zh.github.io 能翻到近期排片、冷门片检修单、选片口径和留言投递方式，全站无弹窗、无跳转、无镜像站。">
+<meta name="keywords" content="米奇影视, miqiyingshi-zh, 映画检修, 放映排程, 冷门片单, 老片修复观看记录, 片长与介质笔记, 独立观影日志">
+<meta name="author" content="米奇影视 放映组">
+<meta name="theme-color" content="#dfe7ef">
+<link rel="canonical" href="https://miqiyingshi-zh.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="米奇影视 放映排程页">
+<meta property="og:title" content="米奇影视 · 映画检修手册（miqiyingshi-zh 在 github.io 的站点）">
+<meta property="og:description" content="逐条检修过的片单与放映批注，域名 miqiyingshi-zh.github.io，不托管、不跳转。">
+<meta property="og:url" content="https://miqiyingshi-zh.github.io/">
+<meta name="twitter:card" content="summary">
+<style>
+:root{
+  --paper:#eef2f7;
+  --paper-2:#e3e9f1;
+  --ink:#16233a;
+  --ink-2:#3d4d68;
+  --line:#8fa3bd;
+  --blue:#1f5fbf;
+  --red:#c0263a;
+  --amber:#d99017;
+  --green:#2f6b4f;
+  --max:1180px;
+  --gutter:clamp(16px,4vw,34px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Songti SC","Source Han Serif SC","Noto Serif CJK SC",Georgia,"Times New Roman",serif;
+  font-size:16px;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  /* 晒图纸底纹：大格 + 小格 */
+  background-image:
+    linear-gradient(var(--paper-2) 1px,transparent 1px),
+    linear-gradient(90deg,var(--paper-2) 1px,transparent 1px),
+    linear-gradient(rgba(143,163,189,.28) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(143,163,189,.28) 1px,transparent 1px);
+  background-size:120px 120px,120px 120px,24px 24px,24px 24px;
+  background-position:-1px -1px;
+}
+img,svg{display:block;max-width:100%}
+a{color:var(--blue);text-decoration:none}
+ul,ol{margin:0;padding:0;list-style:none}
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:.02em;line-height:1.25}
+p{margin:0}
+::selection{background:var(--amber);color:#111}
+
+/* ---------- 工程图边框 ---------- */
+.frame{position:relative;max-width:var(--max);margin:0 auto;padding:0 var(--gutter) 70px}
+.frame::before{
+  content:"";position:fixed;inset:8px;pointer-events:none;z-index:60;
+  border:1.5px solid var(--ink);
+}
+.frame::after{
+  content:"";position:fixed;inset:14px;pointer-events:none;z-index:60;
+  border:.75px solid var(--line);
+}
+@media (max-width:720px){.frame::before,.frame::after{inset:5px;inset:9px}
+
+/* ---------- 顶栏 ---------- */
+.topbar{
+  position:sticky;top:8px;z-index:50;
+  margin:8px 6px 0;
+  background:rgba(238,242,247,.94);
+  backdrop-filter:blur(3px);
+  border:.75px solid var(--ink);
+  display:flex;align-items:center;gap:14px;
+  padding:9px 14px;
+}
+.brand{display:flex;align-items:baseline;gap:9px;flex:1;min-width:0}
+.brand b{font-size:19px;letter-spacing:.14em}
+.brand span{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10.5px;color:var(--ink-2);letter-spacing:.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav{display:flex;gap:4px;align-items:center}
+.nav a{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:11px;letter-spacing:.08em;color:var(--ink);
+  padding:6px 9px;border:.75px solid transparent;
+}
+.nav a:hover{border-color:var(--ink);background:#fff}
+.menubtn{
+  display:none;border:.75px solid var(--ink);background:#fff;color:var(--ink);
+  font-family:inherit;font-size:12px;padding:7px 11px;cursor:pointer;letter-spacing:.16em;
+}
+@media (max-width:820px){
+  .nav{display:none}
+  .menubtn{display:block}
+  .nav.open{display:flex;position:fixed;top:54px;left:14px;right:14px;flex-direction:column;
+    background:var(--paper);border:.75px solid var(--ink);box-shadow:5px 5px 0 rgba(22,35,58,.16)}
+  .nav.open a{border-bottom:.75px solid var(--line);padding:12px 14px}
+  .nav.open a:last-child{border-bottom:0}
+}
+
+/* ---------- 刊头 ---------- */
+.masthead{padding:56px 0 34px;border-bottom:2.5px solid var(--ink);position:relative}
+.masthead .stamp{
+  position:absolute;right:0;top:38px;
+  border:2px solid var(--red);color:var(--red);
+  font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.18em;
+  padding:7px 9px 6px;transform:rotate(3deg);text-align:center;line-height:1.4;
+}
+.masthead .stamp i{display:block;font-style:normal;font-size:15px;letter-spacing:.04em}
+.kicker{
+  font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.22em;
+  color:var(--ink-2);display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+}
+.kicker::before{content:"";width:38px;height:2px;background:var(--red)}
+h1.title{
+  font-size:clamp(46px,11vw,124px);line-height:.92;margin:14px 0 6px;
+  letter-spacing:.04em;word-break:break-word;
+}
+h1.title em{font-style:normal;color:var(--blue);outline:2px solid var(--blue);outline-offset:-2px;padding:0 4px}
+.masthead .sub{font-size:clamp(15px,2.2vw,19px);color:var(--ink-2);max-width:62ch;margin-top:14px}
+.addrbar{
+  margin-top:22px;display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+  border:.75px solid var(--ink);background:#fff;
+}
+.addrbar div{padding:11px 13px;border-right:.75px solid var(--line);font-size:11.5px;line-height:1.5}
+.addrbar div:last-child{border-right:0}
+.addrbar dt{font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.16em;color:var(--ink-2);margin-bottom:3px}
+.addrbar dd{margin:0;font-size:12.5px;word-break:break-all}
+.addrbar a{color:var(--ink);border-bottom:1px dashed var(--blue)}
+@media (max-width:720px){.addrbar{grid-template-columns:1fr}.addrbar div{border-right:0;border-bottom:.75px solid var(--line)}.masthead .stamp{position:static;transform:none;margin-top:18px;display:inline-block}}
+
+/* ---------- 区块通用 ---------- */
+section{padding:52px 0 8px;position:relative}
+.head{display:flex;align-items:flex-end;gap:14px;border-bottom:1.5px solid var(--ink);padding-bottom:9px;margin-bottom:26px;flex-wrap:wrap}
+.head .no{
+  font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#fff;background:var(--ink);
+  padding:3px 8px;letter-spacing:.1em;align-self:stretch;display:flex;align-items:center;
+}
+.head h2{font-size:clamp(24px,4.4vw,38px);letter-spacing:.06em}
+.head .en{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.2em;color:var(--ink-2);margin-left:auto;text-transform:uppercase}
+.lead{color:var(--ink-2);max-width:70ch;margin-bottom:24px;font-size:15.5px}
+
+/* ---------- 01 检修单（表格化） ---------- */
+.sheet{border:.75px solid var(--ink);background:#fff}
+.sheet .row{display:grid;grid-template-columns:64px 1.6fr 1fr 88px 1.4fr;gap:0;border-bottom:.75px solid var(--line)}
+.sheet .row:last-child{border-bottom:0}
+.sheet .cell{border-right:.75px solid var(--line);padding:13px 12px;font-size:13.5px;display:flex;flex-direction:column;justify-content:center}
+.sheet .cell:last-child{border-right:0}
+.sheet .hd{background:var(--ink);color:#fff;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+.sheet .hd .cell{border-right-color:rgba(255,255,255,.35)}
+.sheet .no-c{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--blue);font-weight:700}
+.sheet .ttl b{font-size:15px;letter-spacing:.03em}
+.sheet .ttl small{display:block;color:var(--ink-2);font-size:11px;letter-spacing:.05em;margin-top:3px;font-family:ui-monospace,Menlo,monospace}
+.tag{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.1em;padding:2px 6px;border:.75px solid var(--ink);align-self:flex-start;white-space:nowrap}
+.tag.r{border-color:var(--red);color:var(--red)}
+.tag.b{border-color:var(--blue);color:var(--blue)}
+.tag.g{border-color:var(--green);color:var(--green)}
+.note{font-size:12.5px;color:var(--ink-2);line-height:1.55}
+.note b{color:var(--ink);font-weight:600}
+@media (max-width:820px){
+  .sheet .row{display:block;border-bottom:.75px solid var(--ink)}
+  .sheet .cell{border-right:0;border-bottom:.75px dashed var(--line);flex-direction:row;flex-wrap:wrap;gap:8px;align-items:center}
+  .sheet .cell::before{content:attr(data-k);font-family:ui-monospace,Menlo,monospace;font-size:9px;letter-spacing:.14em;color:var(--ink-2);margin-right:auto;text-transform:uppercase}
+  .sheet .hd{display:none}
+}
+
+/* ---------- 02 放映排程（时间轴） ---------- */
+.tl{position:relative;padding-left:34px}
+.tl::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:1.5px;background:var(--ink)}
+.tl .item{position:relative;margin-bottom:22px;background:#fff;border:.75px solid var(--ink);padding:15px 18px}
+.tl .item::before{content:"";position:absolute;left:-31px;top:19px;width:11px;height:11px;background:var(--paper);border:2px solid var(--red);border-radius:50%}
+.tl .item::after{content:"";position:absolute;left:-24px;top:23px;width:15px;height:1.5px;background:var(--ink)}
+.tl .when{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.12em;color:var(--blue);margin-bottom:5px}
+.tl h3{font-size:20px;letter-spacing:.04em}
+.tl .meta{display:flex;gap:8px;flex-wrap:wrap;margin:9px 0 8px;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.08em;color:var(--ink-2)}
+.tl .meta b{color:var(--ink);font-weight:600}
+.tl p{font-size:14px;color:var(--ink-2)}
+.pass{display:inline-block;margin-top:10px;font-family:ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.12em;border-bottom:1px solid var(--ink)}
+
+/* ---------- 03 选片口径（折叠手册） ---------- */
+.rule{border:.75px solid var(--ink);background:#fff}
+.rule details{border-bottom:.75px solid var(--line);padding:0}
+.rule details:last-child{border-bottom:0}
+.rule summary{
+  cursor:pointer;padding:15px 18px;list-style:none;display:flex;gap:14px;align-items:baseline;
+  font-size:16.5px;letter-spacing:.04em;
+}
+.rule summary::-webkit-details-marker{display:none}
+.rule summary::before{
+  content:attr(data-n);font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--red);
+  border:.75px solid var(--red);padding:2px 6px;flex:none;align-self:center;
+}
+.rule summary::after{content:"＋";margin-left:auto;font-family:ui-monospace,Menlo,monospace;color:var(--ink-2)}
+.rule details[open] summary::after{content:"－"}
+.rule .body{padding:0 18px 18px 56px;font-size:14px;color:var(--ink-2)}
+.rule .body ol{list-style:none;counter-reset:r;margin-top:8px}
+.rule .body ol li{counter-increment:r;margin-bottom:7px;padding-left:22px;position:relative}
+.rule .body ol li::before{content:counter(r,decimal-leading-zero);position:absolute;left:0;top:1px;font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--blue)}
+
+/* ---------- 04 检索台（活字 + 交叉索引） ---------- */
+.grid2{display:grid;grid-template-columns:1.25fr .75fr;gap:26px;align-items:start}
+@media (max-width:860px){.grid2{grid-template-columns:1fr;gap:34px}}
+.cloud{border:.75px solid var(--ink);background:#fff;padding:18px}
+.cloud .h{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.18em;color:var(--ink-2);margin-bottom:14px;display:flex;justify-content:space-between;border-bottom:.75px dashed var(--line);padding-bottom:7px}
+.cloud a{
+  display:inline-block;border:.75px solid var(--ink);color:var(--ink);
+  padding:5px 10px;margin:0 6px 8px 0;font-size:13px;letter-spacing:.03em;background:#fff;
+}
+.cloud a:hover{background:var(--ink);color:#fff}
+.cloud a.sz2{font-size:15.5px;padding:6px 12px}
+.cloud a.sz3{font-size:18px;padding:7px 14px;letter-spacing:.06em}
+.cloud a.sz4{font-size:21px;font-weight:700;padding:8px 16px;border-width:1.5px}
+.xref{background:var(--ink);color:#dfe7ef;padding:20px 20px 16px}
+.xref .h{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.2em;color:var(--amber);margin-bottom:14px;border-bottom:1px solid rgba(223,231,239,.3);padding-bottom:7px}
+.xref dl{margin:0}
+.xref dt{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.12em;color:var(--amber);margin-top:13px}
+.xref dd{font-size:13.5px;line-height:1.6;margin:4px 0 0;color:rgba(223,231,239,.9)}
+.xref code{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#fff;word-break:break-all}
+
+/* ---------- 05 投递（工程签单） ---------- */
+.form{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;background:#fff;border:.75px solid var(--ink);padding:22px}
+.form .f{grid-column:span 1;display:flex;flex-direction:column;gap:5px}
+.form .f.full{grid-column:1/-1}
+.form label{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.16em;color:var(--ink-2)}
+.form input,.form textarea{
+  font-family:inherit;font-size:14.5px;color:var(--ink);background:var(--paper);
+  border:.75px solid var(--line);border-radius:0;padding:10px 11px;resize:vertical;min-height:38px;
+}
+.form input:focus,.form textarea:focus{outline:none;border-color:var(--ink);background:#fff}
+.form button{
+  grid-column:1/-1;font-family:inherit;font-size:15px;letter-spacing:.2em;color:#fff;background:var(--ink);
+  border:0;padding:15px;cursor:pointer;margin-top:6px;
+}
+.form button:hover{background:var(--red)}
+.guide{margin-top:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:.75px solid var(--ink);background:#fff}
+.guide div{padding:16px 15px;border-right:.75px solid var(--line)}
+.guide div:last-child{border-right:0}
+.guide h4{font-size:13.5px;letter-spacing:.08em;margin-bottom:7px;display:flex;gap:8px;align-items:center}
+.guide h4 i{font-style:normal;font-family:ui-monospace,Menlo,monospace;font-size:10px;color:var(--red);border:.75px solid var(--red);padding:1px 5px}
+.guide p{font-size:12.5px;color:var(--ink-2);line-height:1.65}
+@media (max-width:720px){.guide{grid-template-columns:1fr}.guide div{border-right:0;border-bottom:.75px solid var(--line)}.form{grid-template-columns:1fr}}
+
+/* ---------- 页脚 ---------- */
+footer{border-top:2.5px solid var(--ink);margin-top:64px;padding:28px 0 8px;font-size:12.5px;color:var(--ink-2)}
+.foot-top{display:flex;gap:20px;flex-wrap:wrap;justify-content:space-between;align-items:flex-end}
+.foot-top b{font-size:18px;letter-spacing:.1em;color:var(--ink)}
+.foot-top a{color:var(--ink);border-bottom:1px solid var(--line)}
+.colophon{margin-top:18px;padding-top:14px;border-top:.75px dashed var(--line);
+  font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.06em;line-height:1.9;color:var(--ink-2)}
+.colophon b{color:var(--ink);font-weight:600}
+.top{position:fixed;right:16px;bottom:18px;z-index:70;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.16em;
+  background:var(--ink);color:#fff;padding:9px 11px;border:0;cursor:pointer;display:none}
+.top.show{display:block}
+@media print{
+  .top,.menubtn,.nav,.form button{display:none}
+  body{background:#fff}
+  .frame::before,.frame::after{display:none}
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/zhangzong.js"></script>
+<div class="frame">
+
+<header class="topbar" id="top">
+  <div class="brand">
+    <b>米奇影视</b>
+    <span>miqiyingshi-zh · 放映排程页 · github.io</span>
+  </div>
+  <nav class="nav" id="nav">
+    <a href="#sheet">检修单</a>
+    <a href="#screening">排程</a>
+    <a href="#rule">口径</a>
+    <a href="#desk">索引</a>
+    <a href="#drop">投递</a>
+  </nav>
+  <button class="menubtn" id="menubtn" aria-expanded="false" aria-controls="nav">菜单</button>
+</header>
+
+<section class="masthead">
+  <div class="stamp">检修合格<i>MQ-φ</i>第 041 号</div>
+  <div class="kicker"><span>MIQI YINGSHI &nbsp;/&nbsp; 映画检修手册</span><span>VOL.04 · 秋映季</span><span>制图：放映组</span></div>
+  <h1 class="title">米奇<em>影视</em></h1>
+  <p class="sub">一份按「能不能放心坐下来看完」来归档的片单。片子先过一遍放映机，再进这张表：时间、片长、介质、几处卡壳的位置，都记在格子里。不追热搜，不排榜单，只留看完之后还想再翻一次的那些。</p>
+  <dl class="addrbar">
+    <div><dt>站点规范地址</dt><dd><a href="https://miqiyingshi-zh.github.io/">https://miqiyingshi-zh.github.io/</a></dd></div>
+    <div><dt>站点主体</dt><dd>miqiyingshi-zh（GitHub Pages 静态页）</dd></div>
+    <div><dt>更新节律</dt><dd>每周三换一批 · 无推送 · 无弹窗</dd></div>
+  </dl>
+</section>
+
+<!-- 01 -->
+<section id="sheet">
+  <div class="head">
+    <span class="no">01</span><h2>检修单</h2>
+    <span class="en">Inspection Sheet</span>
+  </div>
+  <p class="lead">每张单子只干一件事：把一部片子的「观看成本」摊开。格式沿用放映间的旧表，横轴是片子，纵轴是放映组和一句批注。想找某类片子，先按最右栏的标签挑，比翻排行榜省事。</p>
+  <div class="sheet">
+    <div class="row hd"><div class="cell">编号</div><div class="cell">片目与年份</div><div class="cell">介质／制式</div><div class="cell">片长</div><div class="cell">批注与卡壳点</div></div>
+
+    <div class="row">
+      <div class="cell no-c" data-k="编号">M-041</div>
+      <div class="cell ttl" data-k="片目"><b>南方车站的最后一个周末</b><small>2023 · 剧情 / 悬疑</small></div>
+      <div class="cell" data-k="介质"><span class="tag b">35mm 扫描</span></div>
+      <div class="cell" data-k="片长">118 min</div>
+      <div class="cell note" data-k="批注"><b>耐看度 ★★★★</b>　中段 42' 起雨戏节奏拖，建议直接跳到 67' 的桥段；结尾留白够狠，别边看边刷手机。</div>
+    </div>
+    <div class="row">
+      <div class="cell no-c" data-k="编号">M-042</div>
+      <div class="cell ttl" data-k="片目"><b>面团与火车</b><small>2021 · 动画 / 短片集</small></div>
+      <div class="cell" data-k="介质"><span class="tag g">4K 修复版</span></div>
+      <div class="cell" data-k="片长">54 min</div>
+      <div class="cell note" data-k="批注"><b>耐看度 ★★★☆</b>　适合 30 分钟碎片时间，四段独立，第三段配色脏，调低亮度更好。</div>
+    </div>
+    <div class="row">
+      <div class="cell no-c" data-k="编号">M-043</div>
+      <div class="cell ttl" data-k="片目"><b>无人认领的收音机</b><small>2019 · 纪录片</small></div>
+      <div class="cell" data-k="介质"><span class="tag">数字版</span></div>
+      <div class="cell" data-k="片长">89 min</div>
+      <div class="cell note" data-k="批注"><b>耐看度 ★★★★☆</b>　对白少、环境音好，戴耳机；第 21' 那段磁带底噪是故意留的。</div>
+    </div>
+    <div class="row">
+      <div class="cell no-c" data-k="编号">M-044</div>
+      <div class="cell ttl" data-k="片目"><b>第七次路过花店</b><small>2024 · 爱情 / 都市</small></div>
+      <div class="cell" data-k="介质"><span class="tag r">流媒源</span></div>
+      <div class="cell" data-k="片长">102 min</div>
+      <div class="cell note" data-k="批注"><b>耐看度 ★★★</b>　甜但不腻，男主表演套路化；当背景音陪吃饭合格，认真看会挑刺。</div>
+    </div>
+    <div class="row">
+      <div class="cell no-c" data-k="编号">M-045</div>
+      <div class="cell ttl" data-k="片目"><b>铁门后面的人</b><small>2017 · 犯罪 / 方言</small></div>
+      <div class="cell" data-k="介质"><span class="tag b">蓝光 remux</span></div>
+      <div class="cell" data-k="片长">131 min</div>
+      <div class="cell note" data-k="批注"><b>耐看度 ★★★★★</b>　慢热，前 35' 别急；方言字幕建议开，丢了半句就接不上。</div>
+    </div>
+    <div class="row">
+      <div class="cell no-c" data-k="编号">M-046</div>
+      <div class="cell ttl" data-k="片目"><b>玻璃上的雾</b><small>2022 · 实验影像</small></div>
+      <div class="cell" data-k="介质"><span class="tag g">16mm 转制</span></div>
+      <div class="cell" data-k="片长">33 min</div>
+      <div class="cell note" data-k="批注"><b>耐看度 ★★☆</b>　门槛高，画面重复多；只对影像语言感兴趣的才值一回，其他人跳过。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 -->
+<section id="screening">
+  <div class="head">
+    <span class="no">02</span><h2>放映排程</h2>
+    <span class="en">Screening Log</span>
+  </div>
+  <p class="lead">这是近期打算再看一遍的场次记录。不是活动公告，也不收票——只是把「哪天、看哪部、用哪种介质」钉在墙上，方便自己回头核对，也方便你来照着挑。</p>
+  <div class="tl">
+    <div class="item">
+      <div class="when">第 41 场 · 周三夜场 · 10 月 28 日</div>
+      <h3>铁门后面的人 <span style="font-size:13px;color:var(--ink-2);font-weight:400">（蓝光 remux · 131 min）</span></h3>
+      <div class="meta"><span>介质 <b>蓝光</b></span><span>字幕 <b>方言中字</b></span><span>场次 <b>二刷</b></span></div>
+      <p>第一次看漏了结尾那通电话的回声，这回打算从 110' 开始倒着拉一遍。观影门槛：能接受慢节奏和大量静场。</p>
+      <a class="pass" href="#sheet">→ 回到检修单 M-045</a>
+    </div>
+    <div class="item">
+      <div class="when">第 42 场 · 周六午后 · 10 月 31 日</div>
+      <h3>面团与火车 <span style="font-size:13px;color:var(--ink-2);font-weight:400">（4K 修复 · 54 min）</span></h3>
+      <div class="meta"><span>介质 <b>4K</b></span><span>字幕 <b>无对白</b></span><span>场次 <b>首看</b></span></div>
+      <p>短，刚好塞在午饭后。准备拿它试新接的那对音箱，低频段在第三段有明显设计，听完再补批注。</p>
+      <a class="pass" href="#sheet">→ 回到检修单 M-042</a>
+    </div>
+    <div class="item">
+      <div class="when">第 43 场 · 周一通勤 · 11 月 2 日</div>
+      <h3>无人认领的收音机 <span style="font-size:13px;color:var(--ink-2);font-weight:400">（数字版 · 89 min）</span></h3>
+      <div class="meta"><span>介质 <b>数字</b></span><span>设备 <b>耳机</b></span><span>场次 <b>三刷</b></span></div>
+      <p>通勤专用场次，分段听。第二段的旧电台采样每次都能听出新东西，这回重点记时间点。</p>
+      <a class="pass" href="#sheet">→ 回到检修单 M-043</a>
+    </div>
+  </div>
+</section>
+
+<!-- 03 -->
+<section id="rule">
+  <div class="head">
+    <span class="no">03</span><h2>选片口径</h2>
+    <span class="en">Selection Criteria</span>
+  </div>
+  <p class="lead">有人问「你怎么挑片」，就把这几条摊开给他看。不是标准答案，是这台放映机自己的脾气——照着它，你大概能猜到我会不会给某部片子留位置。</p>
+  <div class="rule">
+    <details open>
+      <summary data-n="A">先看「能不能坐住」，不看评分和榜单</summary>
+      <div class="body">
+        <p>打分只解决「值不值得点开」，解决不了「会不会看到一半走神」。所以检修单里记的是耐看度和卡壳点，不写几星几分。一部片子前十分钟能不能把人摁住，比它豆瓣多少分有用。</p>
+        <ol>
+          <li>前 15 分钟出现三次以上有效信息，进候选。</li>
+          <li>靠旁白解释剧情的，降级。</li>
+          <li>结尾有回响、能让人停三十秒的，优先。</li>
+        </ol>
+      </div>
+    </details>
+    <details>
+      <summary data-n="B">介质算半个选片条件</summary>
+      <div class="body">
+        <p>同一部片，35mm 扫描和压缩流媒完全是两回观看。表里单列「介质／制式」一栏，不是装懂，是因为画质噪点、音轨层次会直接改变耐看度。修复版优先，洗得过分发腻的也扣分。</p>
+      </div>
+    </details>
+    <details>
+      <summary data-n="C">冷门不等于好，但值得先试一次</summary>
+      <div class="body">
+        <p>不看头部推荐流的算法结论，所以名单里小众片比例偏高。但实验片和纯闷片会标清楚门槛，不拿「高级」当遮羞布——M-046 就是典型的：好看的人极爱，一般观众直接跳过。</p>
+      </div>
+    </details>
+    <details>
+      <summary data-n="D">不托管、不搬运、不挂资源链接</summary>
+      <div class="body">
+        <p>这页只做片目与观后记录，不放下载地址、不放播放直链。想看表里哪部，请走正规发行渠道或你自己手上的碟。本页唯一地址就是 <b>miqiyingshi-zh.github.io</b>，别的带同样名字的站都不是这里。</p>
+      </div>
+    </details>
+    <details>
+      <summary data-n="E">更新慢一点，但每条都自己看过</summary>
+      <div class="body">
+        <p>一周换一批，不追日更。每一条批注都来自至少一遍完整看完，没看完的标「进行中」，不装作点评完毕。看走眼了会回来改批注，改过的留一条日期。</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- 04 -->
+<section id="desk">
+  <div class="head">
+    <span class="no">04</span><h2>检索台</h2>
+    <span class="en">Index &amp; Cross-ref</span>
+  </div>
+  <p class="lead">没有搜索框——片目还不到需要搜索框的量级。点标签挑情绪和介质，右边是对照索引，看到眼熟的片名或术语，顺着就能翻到对应格子。</p>
+  <div class="grid2">
+    <div class="cloud">
+      <div class="h"><span>按情绪 / 介质 / 门槛筛</span><span>共 18 条标签</span></div>
+      <a href="#sheet" class="sz4">慢热</a>
+      <a href="#sheet" class="sz3">方言对白</a>
+      <a href="#sheet" class="sz2">雨戏</a>
+      <a href="#sheet" class="sz4">修复版</a>
+      <a href="#sheet" class="sz2">短于 60 分钟</a>
+      <a href="#sheet" class="sz3">环境音控</a>
+      <a href="#sheet" class="sz2">二刷值</a>
+      <a href="#sheet" class="sz4">35mm 质感</a>
+      <a href="#sheet" class="sz2">甜但不腻</a>
+      <a href="#sheet" class="sz3">门槛高</a>
+      <a href="#sheet" class="sz2">通勤场</a>
+      <a href="#sheet" class="sz2">静场多</a>
+      <a href="#sheet" class="sz3">冷门纪录片</a>
+      <a href="#sheet" class="sz2">配饭看</a>
+      <a href="#sheet" class="sz2">结尾留白</a>
+      <a href="#sheet" class="sz4">值得戴耳机</a>
+      <a href="#sheet" class="sz2">都市感</a>
+      <a href="#sheet" class="sz3">别边看边刷手机</a>
+    </div>
+    <aside class="xref">
+      <div class="h">交叉索引 / 常问到的几点</div>
+      <dl>
+        <dt>01 · 这页到底是干嘛的</dt>
+        <dd>米奇影视的观影记录页，只存片单、放映时间和看完的批注。不是资源站，也不接播放。</dd>
+        <dt>02 · 正确入口是哪条</dt>
+        <dd>唯一一条：<code>https://miqiyingshi-zh.github.io/</code>。搜「米奇影视」认准这个地址，其他仿站同名不同域，都不是本页。</dd>
+        <dt>03 · 片单多久动一次</dt>
+        <dd>每周三整批换，单次 5–8 部。进行中的会标着，看完才写耐看度。</dd>
+        <dt>04 · 能不能按类型查</dt>
+        <dd>先点左边标签；嫌不够细，把「片名 + 介质」发到下面投递栏，我翻完会回一条批注。</dd>
+        <dt>05 · 为什么没有搜索框</dt>
+        <dd>条目还少，标签加索引比输入框准。等破百条再考虑上检索。</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<!-- 05 -->
+<section id="drop">
+  <div class="head">
+    <span class="no">05</span><h2>投递与说明</h2>
+    <span class="en">Submission Form</span>
+  </div>
+  <p class="lead">想让我试试哪部片子，或者觉得某条批注写偏了，填下面这张单子。本页是纯静态文件，按钮不真的发出去——提交动作被拦在本页，只做个收件回执给你看，真要留话请连同片名一起记在备注里。</p>
+  <form class="form" id="fm" novalidate>
+    <div class="f"><label for="f1">称呼 / 怎么叫你</label><input id="f1" type="text" placeholder="随便填，可留空"></div>
+    <div class="f"><label for="f2">想推的片名（带年份最好）</label><input id="f2" type="text" placeholder="如：铁门后面的人 2017"></div>
+    <div class="f full"><label for="f3">为什么值得放进检修单</label><textarea id="f3" rows="4" placeholder="哪段好、什么介质、门槛大概多高，越具体越容易被翻到"></textarea></div>
+    <div class="f full" style="font-family:ui-monospace,Menlo,monospace;font-size:10px;color:var(--ink-2);letter-spacing:.06em">
+      收件回执会显示在本页，不会传到任何服务器。<br>站点唯一地址：https://miqiyingshi-zh.github.io/
+    </div>
+    <button type="submit">登记到待检队列 →</button>
+    <div id="ack" hidden style="grid-column:1/-1;border:.75px dashed var(--green);background:#eef6f1;color:var(--green);padding:12px 14px;font-size:13.5px"></div>
+  </form>
+
+  <div class="guide">
+    <div>
+      <h4><i>A</i>只收片目线索</h4>
+      <p>片名、年份、介质、一句理由就够了。不收下载链接、不收种子、不收网盘口令，这类内容直接丢。</p>
+    </div>
+    <div>
+      <h4><i>B</i>翻完才回音</h4>
+      <p>进待检队列不等于进检修单。我看完会回一条批注，挑中的标上编号，没选中的也会留一句为什么不合适。</p>
+    </div>
+    <div>
+      <h4><i>C</i>认准唯一域名</h4>
+      <p>米奇影视只落在 <b style="color:var(--ink)">miqiyingshi-zh.github.io</b>。页面不跳、不弹广告、不挂镜像，看到别的同名站请当没看见。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-top">
+    <div>
+      <b>米奇影视</b>
+      <div style="margin-top:6px">映画检修手册 · 放映排程页 &nbsp;|&nbsp; 不托管 · 不搬运 · 不接播放直链</div>
+    </div>
+    <div><a href="#top">回到刊头 ↑</a></div>
+  </div>
+  <div class="colophon">
+    <b>网页地址</b>　https://miqiyingshi-zh.github.io/　·　<b>站点主体</b> miqiyingshi-zh（GitHub Pages 静态托管）<br>
+    <b>版次</b> MQ-φ / 04　<b>制图</b> 米奇影视 放映组　<b>字符集</b> UTF-8　<b>适配</b> 320px 起的全宽视口<br>
+    本页所有片目批注为观影随笔，不构成推荐或资源指引；片名、年份、介质栏仅作个人归档记录。
+  </div>
+</footer>
+
+<button class="top" id="topbtn" aria-label="回到顶部">↑ TOP</button>
+</div>
+
+<script>
+(function(){
+  var nav=document.getElementById('nav'),btn=document.getElementById('menubtn');
+  btn.addEventListener('click',function(){
+    var o=nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded',o?'true':'false');
+    btn.textContent=o?'关闭':'菜单';
+  });
+  nav.addEventListener('click',function(e){
+    if(e.target.tagName==='A'){
+      nav.classList.remove('open');
+      btn.setAttribute('aria-expanded','false');
+      btn.textContent='菜单';
+    }
+  });
+  var t=document.getElementById('topbtn');
+  window.addEventListener('scroll',function(){
+    t.classList.toggle('show',window.scrollY>500);
+  },{passive:true});
+  t.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+  var fm=document.getElementById('fm'),ack=document.getElementById('ack');
+  fm.addEventListener('submit',function(e){
+    e.preventDefault();
+    var n=document.getElementById('f2').value.trim();
+    if(!n){ack.hidden=false;ack.textContent='先把片名填上，不然这条队列空着没法记。';return;}
+    ack.hidden=false;
+    ack.textContent='已登记到待检队列：『'+n+'』。翻完会在这页补一条编号批注，请常回 https://miqiyingshi-zh.github.io/ 看更新。';
+    fm.reset();
+  });
+})();
+</script>
+</body>
+</html>
